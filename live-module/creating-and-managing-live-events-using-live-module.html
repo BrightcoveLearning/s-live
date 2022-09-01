@@ -93,14 +93,8 @@
     <h2 id="create">Creating a new event</h2>
     <p>For a complete step-by-step guide to creating and streaming a live event using the Live module, see one of the following topics:</p>
     <ul>
-        {% if site.product_short == "Video Cloud" or site.product_short == "Beacon" or site.product_short == "CorpTV" %}
-      <li><a href="/get-started/step-step-using-live-module-telestream-wirecast.html">Step-by-Step: Using the Live Module with Telestream Wirecast</a></li>
-      <li><a href="/get-started/step-step-using-live-module-open-broadcaster-software-obs.html">Step-by-Step: Using the Live Module with Open Broadcaster Software (OBS)</a></li>
-        {% endif %}
-        {% if site.product_short == "Live" %}
-              <li><a href="/get-started/step-step-using-live-module-telestream-wirecast.html">Step-by-Step: Using the Live Module with Telestream Wirecast</a></li>
-      <li><a href="/get-started/step-step-using-live-module-open-broadcaster-software-obs.html">Step-by-Step: Using the Live Module with Open Broadcaster Software (OBS)</a></li>
-        {% endif %}
+      <li><a href="{{ site.live_prefix }}get-started/step-step-using-live-module-telestream-wirecast.html">Step-by-Step: Using the Live Module with Telestream Wirecast</a></li>
+      <li><a href="{{ site.live_prefix }}get-started/step-step-using-live-module-open-broadcaster-software-obs.html">Step-by-Step: Using the Live Module with Open Broadcaster Software (OBS)</a></li>
     </ul>
     <p>To create a new event, follow these steps.</p>
     <ol class="bcls-tasklist-restart">
@@ -180,11 +174,7 @@
             <aside class="bcls-aside bcls-aside--information">Note: Clips can't be created from encrypted live streams.</aside>
           </li>
           <li><strong>Digital Rights Management (DRM)</strong> - Secure Premium content stream with Digital Rights Management technologies. For details, see the 
-              {% if site.product_short == "Video Cloud" or site.product_short == "Beacon" or site.product_short == "CorpTV" %}
-              <a href="/live/general/live-drm.html">Live DRM</a> document.
-              {% endif %}
-            {% if site.product_short == "Live" %}
-              <a href="/general/live-drm.html">Live DRM</a> document.
+              <a href="{{ site.live_prefix }}general/live-drm.html">Live DRM</a> document.
               {% endif %}
             <ul>
               <li>HLS + <a href="https://developer.apple.com/streaming/fps/">FairPlay</a></li>
@@ -387,7 +377,7 @@
       <h3 id="rtmp">RTMP</h3>
       <p>The RTMP section can be used to add RTMP Outputs. This allows the live stream to be sent to other RTMP entry points. This can be used to send the live to stream to Facebook or YouTube for example.</p>
       <figure class="bcls-figure"><img class="bcls-image--no-border" alt="" src="/assets/images/s-live-img/live-module/node18470-rtmp.png" /></figure>
-      <p>Enter the <strong>RTMP Output URL</strong> and the <strong>Rendition</strong> to send. Note that the format of the output URL may change depending on where the RTMP stream is being used. For more information, see <a href="using-live-rtmp-outputs-stream-facebook-and-youtube.html">Using Live RTMP Outputs to Stream to Facebook and YouTube</a>.</p>
+      <p>Enter the <strong>RTMP Output URL</strong> and the <strong>Rendition</strong> to send. Note that the format of the output URL may change depending on where the RTMP stream is being used. For more information, see <a href="{{ site.live_prefix }}live-module/using-live-rtmp-outputs-stream-facebook-and-youtube.html">Using Live RTMP Outputs to Stream to Facebook and YouTube</a>.</p>
       <aside class="bcls-aside bcls-aside--information">Note: RTMP outputs are limited to 5 outputs per live job. This limitation includes connections marked as an error.</aside>
     </div>
     <div>
@@ -512,12 +502,7 @@
   </section>
   <section class="bcls-section">
     <h2 id="captions">Captions</h2>
-    {% if site.product_short == "Video Cloud" or site.product_short == "Beacon" or site.product_short == "CorpTV" %}
-    <p>For details about using captions with Live streams, see the <a href="/live/general/captions-with-live-streams.html"> Captions with Live Streams</a> document.</p>
-      {% endif %}
-    {% if site.product_short == "Live" %}
-    <p>For details about using captions with Live streams, see the <a href="/general/captions-with-live-streams.html"> Captions with Live Streams</a> document.</p>
-{% endif %}
+    <p>For details about using captions with Live streams, see the <a href="{{ site.live_prefix }}general/captions-with-live-streams.html"> Captions with Live Streams</a> document.</p>
   </section>
   <section class="bcls-section">
     <h2 id="trouble">Troubleshooting live stream issues</h2>
