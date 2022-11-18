@@ -1,4 +1,4 @@
-<article class="bcls-article"> 
+<article class="bcls-article">
   <h1>{{ page.title }}</h1>
   <summary>{{ page.description }}</summary>
   <section class="bcls-section">
@@ -14,7 +14,9 @@
       <li><a href="{{ site.live_prefix }}live-module/scheduling-clips.html">Scheduling Clips</a></li>
       <li><a href="{{ site.live_prefix }}live-module/scheduling-live-event.html">Scheduling Live Events</a></li>
       <li><a href="{{ site.live_prefix }}live-module/using-live-rtmp-outputs-stream-facebook-and-youtube.html">Using RTMP Outputs to Stream to Facebook and YouTube</a></li>
+      {% if site.product_short != "Beacon" %}
       <li><a href="{{ site.live_prefix }}live-module/zoom-live-integration.html">Brightcove Live - Zoom Integration</a></li>
+      {% endif %}
     </ul>
   </section>
 </article>
