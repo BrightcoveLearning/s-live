@@ -1,14 +1,34 @@
-<article class="bcls-article"> 
-  <h1>{{ page.title }}</h1>
+<style>
+  a {
+    text-decoration: none;
+  }
+</style>
+<article class="bcls-article">
+  <h1><i class="fa-regular fa-circle-info"></i> {{ page.title }}</h1>
   <summary>{{ page.description }}</summary>
-  <section class="bcls-section">
-    <ul>
-      <li><a href="{{ site.live_prefix }}general/captions-with-live-streams.html">Captions with Live Streams</a></li>
-      <li><a href="{{ site.live_prefix }}general/live-drm.html">Live DRM</a></li>
-      <li><a href="{{ site.live_prefix }}general/live-platforms-comparison-matrix.html">Live Platforms Comparison Matrix</a></li>
-      <li><a href="{{ site.live_prefix }}general/live-video-glossary.html">Live Video Glossary</a></li>
-      <li><a href="{{ site.live_prefix }}general/reducing-latency-live-streams.html">Reducing Latency for Live Streams</a></li>
-      <li><a href="{{ site.live_prefix }}general/supported-encoders-live-events.html">Supported Encoders for Live Events</a></li>
-    </ul>
-  </section>
+  <div class="row">
+    <div class="col-12 col-lg-4 py-3">
+      <div class="card card-hover shadow-sm" onclick="location.href='/live/general/index.html';">
+        <div class="card-body">
+          <div class="card-text">
+            <ul class="list-group list-group-flush">
+              {% for item in site.data.navigation %}
+              {% if item.name == page.parent %}
+              {% for entry in item.docs %}
+              {% if entry.name == page.title %}
+              {% for doc in entry.docs %}
+              <li class="list-group-item"><a href="{{ doc.url }}">{{ doc.name }}</a></li>
+              {% endfor %}
+              {% endif %}
+              {% endfor %}
+              {% endif %}
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+        <!--//card-body--> 
+      </div>
+      <!--//card--> 
+    </div>
+  </div>
 </article>
