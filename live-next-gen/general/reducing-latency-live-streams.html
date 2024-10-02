@@ -1,0 +1,123 @@
+<article class="bcls-article">
+  <h1>Reducing Latency for Live Streams</h1>
+  <summary>This topic explains how you can reduce latency for your Brightcove Live streams.</summary>
+  <section class="bcls-section">
+    <h2 id="Introduction">Introduction</h2>
+    <p>Latency is the time lag between the when something is recorded in real life and when it is seen in a video player. There is, of course, some real time required to transmit a signal from the source through the internet to a viewer's player. Latency is aggravated by the fact that online video is transmitted in discreet chunks, called segments.</p>
+
+    <p>Latency can be reduced by shortening the length of the video segments, and the following sections will detail how you can do this. </p>
+    <p>Be aware, however, that there is a tradeoff: to insure uninterrupted playback, the player downloads a few video segments ahead of the current playback position (this is called buffering), so that they are ready when needed.</p>
+    <p>If you shorten the length of segments, keep the following in mind:</p>
+    <ul>
+      <li>The player will be pre-fetching less video data, and chances of playback pausing while the player buffers additional segments will be increased</li>
+      <li>The customer's CDN will see increased request traffic</li>
+      <li>Apple’s recommendation for standard live stream HLS is a 6-second segment duration. Shortening the segments may make the stream less stable in sub-optimal conditions. <strong>Low Latency Live</strong> may be a better solution if you need minimal latency.</li>
+    </ul>
+    <aside class="bcls-aside bcls-aside--information">This document refers to reducing latency for regular live streams. It does not refer to Low Latency Live or LL-HLS.</aside>
+  </section>
+
+  <!-- <section class="bcls-section">
+    <h2 id="Requirements">Requirements</h2>
+    <p>The following player versions support Low Latency HLS with live streams:</p>
+
+    <ul>
+      <li>Brightcove Player (web) release 6.62.0 and newer</li>
+      <li>Native SDK for iOS release 6.10.3 and newer</li>
+      <li>Native SDK for Android release 7.0.1 and newer</li>
+    </ul>
+  </section> -->
+
+  <section class="bcls-section">
+    <h2 id="Creating_Reduced_Latency_Live_Profile">Creating Reduced Latency Live Profile</h2>
+    <p>To reduce latency, you will need to create a custom Live profile. Follow the steps below:</p>
+    <ol class="bcls-tasklist-restart">
+      <li>Login to Studio.</li>
+      <li>Open the <strong>Admin</strong> module.</li>
+      <li>In the left navigation, click <strong>Ingest Profiles</strong>.</li>
+      <li>Select one of the <strong>Live</strong> ingest profiles with no more than <strong>4</strong> renditions.
+        <figure class="bcls-figure"><img class="bcls-image" alt="Select a Live Profile" src="/assets/images/s-live-img/general/select_ingest_profile.png" /> </figure>
+      </li>
+      <li>Click on the link to open the profile.</li>
+      <li>Click <span class="button-blue">Duplicate</span> to create a new profile based on the selected one.</li>
+      <li>In the new profile, change the <code translate="No">name</code> to "Low Latency Profile" (or another meaningful name).</li>
+      <li>For each of the <code translate="No">renditions</code>, change the <code translate="No">segment_seconds</code> to <code translate="No">2</code> to reduce the length of the segments to 2 seconds.</li>
+      <li>The profile should look similar to this:
+        <pre class="line-numbers">
+<code class="language-json" translate="No">{
+  "model_version": 1,
+  "name": "<span class="bcls-highlight">Low Latency Profile</span>",
+  "description": "Deliver high-quality renditions to maximize quality for desktop and OTT.",
+  "account_id": "57838016001",
+  "renditions": [
+    {
+      "media_type": "video",
+      "format": "ts",
+      <span class="bcls-highlight">"segment_seconds": 2,</span>
+      "label": "hls1080p",
+      "live_stream": true,
+      "video_codec": "h264",
+      "video_bitrate": 4000,
+      "keyframe_interval": 60,
+      "width": 1920,
+      "height": 1080,
+      "h264_profile": "high"
+    },
+    {
+      "media_type": "video",
+      "format": "ts",
+      <span class="bcls-highlight">"segment_seconds": 2,</span>
+      "label": "hls720p",
+      "live_stream": true,
+      "video_codec": "h264",
+      "video_bitrate": 2400,
+      "keyframe_interval": 60,
+      "width": 1280,
+      "height": 720,
+      "h264_profile": "high"
+    },
+    {
+      "media_type": "video",
+      "format": "ts",
+      <span class="bcls-highlight">"segment_seconds": 2,</span>
+      "label": "hls540p",
+      "live_stream": true,
+      "video_codec": "h264",
+      "video_bitrate": 1700,
+      "keyframe_interval": 60,
+      "width": 960,
+      "height": 540,
+      "h264_profile": "main"
+    },
+    {
+      "media_type": "video",
+      "format": "ts",
+      <span class="bcls-highlight">"segment_seconds": 2,</span>
+      "label": "hls360p",
+      "live_stream": true,
+      "video_codec": "h264",
+      "video_bitrate": 900,
+      "keyframe_interval": 60,
+      "width": 640,
+      "height": 360,
+      "h264_profile": "main"
+    }
+  ],
+  "packages": []
+}</code></pre>
+      </li>
+      <li>To use the profile, select it when creating a new Live Event in the Live module.
+        <figure class="bcls-figure"><img class="bcls-image" alt="Create Live Event" src="/assets/images/s-live-img/general/create-live-event.png" /> </figure>
+      </li>
+    </ol>
+  </section>
+  <section class="bcls-section">
+    <h2 id="Using_the_Live_API">Using the Live API</h2>
+    <p>If you want reduced latency, and you use the Live API to create your live jobs, just create the job as you normally do, but include <strong>no more than 4 renditions</strong>, and set <code translate="No">segment_seconds</code> for each rendition to <code translate="No">2</code>. Make sure you observe the <a href="#Limitations">listed limitations</a> for this feature.</p>
+  </section>
+  <section class="bcls-section">
+    <h2 id="Limitations">Limitations</h2>
+    <p>The use of a 2-second segment length is not compatible with live jobs that have a redundancy aspect. </p>
+  </section>
+</article>
+
+
