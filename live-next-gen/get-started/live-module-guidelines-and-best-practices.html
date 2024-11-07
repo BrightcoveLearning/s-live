@@ -1,15 +1,8 @@
 <article class="bcls-article">
   <h1>{{ page.title }}</h1>
   <summary>{{ page.description }}</summary>
-  
   <section class="bcls-section">
-    <p>Brightcove Live provides a robust service for creating live streaming events or 24/7 live streams. This guide outlines best practices for optimizing your live streams</p>
-    <aside class="bcls-aside bcls-aside--information">Notes:
-      <ul>
-        <li>Live outputs are VBR.</li>
-        <li>The average video bitrate should be around the target value, but there can be brief periods when the measured video bitrate exceeds that target.</li>
-      </ul>
-    </aside>
+    <p>Brightcove Live provides a robust service for creating live streaming events or 24/7 live linear streams. This guide outlines best practices for optimizing your live streams</p>
   </section>
   <section class="bcls-section">
     <h2 id="Content_context">Content context</h2>
@@ -29,21 +22,12 @@
       <tbody class="bcls-table__body">
         <tr>
           <td>Input bitrate</td>
-          <td>The bitrate that the encoder sends. Higher rates are more susceptible to network loss so should be kept as low as practical.</td>
+          <td>"The bitrate of the video source feed from your contribution encoder sends. The general rule of thumb is your source input bitrate should be approximately two times (2x) the bitrate of your the top rendition in your channel configuration. Note: Higher bitrate source feeds are more susceptible to network loss.</td>
         </tr>
         <tr>
           <td>Input resolution</td>
           <td>This should match the source content. There is no benefit in making this greater than the original source and the higher this value is, the higher the bitrate is required to support it.</td>
         </tr>
-        <tr>
-          <td>Input bitrate to top profile ratio</td>
-          <td> 
-            <p>To ensure optimal performance during live events, we recommend setting the input bitrate to match the bitrate of your highest bitrate live rendition. However, exceeding the maximum rendition bitrate significantly can potentially result in buffering, high input/output drift, and other related issues. Therefore, Brightcove recommends carefully considering the following factors when determining the input bitrate:</p>
-            <ul>
-              <li>Aim to match the bitrate of your highest bitrate live rendition to maintain quality and minimize potential issues.</li>
-              <li>In certain cases, a slightly higher input bitrate than the highest rendition may be acceptable but should be approached with caution to avoid performance degradation.</li>
-              <li>Conduct thorough testing to find the optimal input bitrate that balances quality, stability, and compatibility with your specific streaming setup and content.</li>
-            </ul>
 
             <!-- The input bitrate should be higher than the rate of the top profile, but too much higher may result in dropped frames or other issues - e.g. if your top rate is 1080p 30fps, the input should ideally be around 4 MBPS. Note that this is affected by the profile. We generally recommend an input bitrate that is 2x (twice) the bitrate of your highest bitrate live rendition.
             <p>If you require a high bitrate top output it is worth testing the <code>copy_video</code> setting which will simply copy your input encode to the output.</p> -->
@@ -62,9 +46,8 @@
         </tr>
         <tr>
           <td>Keyframe rate</td>
-          <td> The most efficient setting for this is the segment duration x frame rate - for example, if you have 6 second segments and 30fps making the keyframe rate 180 (6x30) would result in the lowest decoder load.
-            <p>However, to account for any fluctuations this is set to 2 x the frame rate - for example, 60 for a framerate of 30 fps.</p>
-            <aside class="bcls-aside bcls-aside--information language-editable">Note that the default ingest profiles for Live assume a framerate of 30 fps and therefore set the keyframe rate to 60. If your input stream has a different framerate (25 fps or 60 fps, for example) you should create a custom ingest profile by duplicating the default one and setting the keyframe rate to twice the framerate (for example, set it to 120 if the input framerate is 60 fps).</aside></td>
+          <td> Number of keyframes per second. So a value of 0.5 would result in one keyframe every two seconds. A value of 3 would result in three keyframes per second. The ingest profiles defined the keyframe Rate as a fractional value. So a value of 0.5 indicates that 1/0.5=2 which implies a keyframe would be inserted every 2 seconds.
+        </td>
         </tr>
         <tr>
           <td>GOP structure</td>
@@ -75,12 +58,12 @@
     <h3>Input restrictions</h3>
     <p>In order to ensure the highest quality, most consistent streaming experience, Brightcove Live limits input stream settings to:</p>
     <ul>
-      <li>Protocol: <code translate="No">rtmp</code>, <code translate="No">rtp</code>, <code translate="No">rtp-fec</code>, or <code translate="No">srt</code> (all except <code translate="No">rtmp</code> are for MPEG2-TS inputs)<sup><strong><a href="#note1-1">[1-1]</a></strong></sup></li>
+      <li>Protocol: <code translate="No">rtmp</code>, <code translate="No">rtp</code>, or <code translate="No">srt</code> (all except <code translate="No">rtmp</code> are for MPEG2-TS inputs)<sup><strong><a href="#note1-1">[1-1]</a></strong></sup></li>
       <li>Resolution: Maximum 1920x1080</li>
-      <li>Maximum 30 fps, which is typical. Brightcove supports up to 60 fps, but you will need to <a href="https://supportportal.brightcove.com/">Contact Brightcove Support</a> to have the limit increased. When using 60fps, Brightcove recommends increasing the bitrate to achieve the desired visual quality for the content and a constant frame rate.</li>
-      <li>The max input bitrate that can ingest is set at 30Mbps. And the max output bitrate is 20Mbps.</li>
-      <li>Constant Bitrate (CBR) greatly reduces the chance of problems</li>
-      <li>Video codec must be H.264</li>
+      <li>Recommended: 30 fps, Maximum: 60 fps. Note: Higher frame rates require higher input bitrate to maintain quality of the source feed</li>
+      <li>The max input bitrate that can ingest is set at 50Mbps. And the max output bitrate is 25Mbps.</li>
+      <li>Set your encoder to Constant Bitrate (CBR). Variable Bitrate (VBR) feeds can be problematic for  the live streaming pipeline</li>
+      <li>Video Codecs: h.264, HEVC</li>
       <li>Slices: If your encoder has this option, set it to <code translate="no">1</code></li>
       <li>Audio codec must be <code translate="No">AAC</code></li>
       <li>Audio sampling rate: 44.1khz and 48khz are the recommended sample audio rates to use</li>
@@ -103,10 +86,6 @@
       <li id="note1-1"><sup><strong>[1-1]</strong></sup> If you have multiple video/audio tracks in your TS input, we will pick the first for each. We also strongly recommend using FEC, as plain TS over UDP over the internet is very unreliable. For FEC, we could note that the <em>smaller</em> the values you use for rows/columns, the more reliable the error correction will be (at the cost of increased bandwidth).</li>
       <li id="note1-2"><sup><strong>[1-2]</strong></sup> You must set caption positioning in the 608 data when implementing 608 captions.</li>
     </ul>
-  </section>
-  <section class="bcls-section">
-    <h2 id="long_running_jobs">Long running jobs</h2>
-    <p>If you have long-running jobs (such as linear channels), please reactivate them on a monthly basis to get the advantage of bug fixes and new features.</p>
   </section>
   <section class="bcls-section">
     <h2 id="Key_issues">Key issues with streaming</h2>
